@@ -1,6 +1,7 @@
 from datetime import datetime
 import collections
 
+from dotenv import load_dotenv
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -8,6 +9,7 @@ from pandas import read_excel
 
 
 def main():
+    file_name = os.getenv('XLSX_FILE')
     creation_year = 1920
     winery_age = datetime.now().year - creation_year
 
@@ -15,9 +17,9 @@ def main():
             loader=FileSystemLoader('.'),
             autoescape=select_autoescape(['html', 'xml'])
         )
-    
+
     wines = read_excel(
-                'wine.xlsx',
+                file_name,
                 keep_default_na=False,
                 na_values=None
             ).to_dict(orient="records")
@@ -45,4 +47,5 @@ def main():
 
 
 if __name__ == "__main__":
+    load_dotenv()
     main()
